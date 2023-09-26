@@ -25,6 +25,7 @@ import {
   Legend,
 } from 'chart.js';
 import { Line } from "react-chartjs-2"
+import { GoBookmark } from "react-icons/go"
 
 ChartJS.register(
     CategoryScale,
@@ -57,14 +58,16 @@ export default function PageProduct() {
             <button><AiOutlineHome size={24} /></button>
             <button><FiShare size={24} /></button>
         </div>}/>
-        {data && <div className="pt-[57px]">
-            {data.product?.release.image_urls && data.product?.release.image_urls.length > 0 && <Swiper>
-                {data.product?.release.image_urls.map((image, index) => <SwiperSlide key={index}>
+        <div className="pt-[57px]">
+            <Swiper className="aspect-square w-full bg-gray-50">
+            {data &&data.product?.release.image_urls && data.product?.release.image_urls.length > 0 && 
+                data.product?.release.image_urls.map((image, index) => <SwiperSlide key={index}>
                     <div className="aspect-square w-full bg-gray-50" style={{backgroundColor: data.product.release.bgcolor}}>
                         <img src={image} alt={data.product?.release.title} className="absolute top-0 left-0 w-full h-full object-contain" />
                     </div>
                 </SwiperSlide>)}
-            </Swiper>}
+            </Swiper>
+            {data && <>
             <div className="p-4">
                 <h2 className="font-bold inline-block mb-2 border-b-2 border-black">{data.product.brand.name}</h2>
                 <h1 className="line-height-130 pb-1">{data.product.release.name}</h1>
@@ -140,52 +143,44 @@ export default function PageProduct() {
                                 : type.span}
                             </button>)))}
                         </div>
-                        {currentChart && <Line options={{
-                            responsive: true,
-                            plugins: {
-                                legend: {
-                                    display:false
-                                },
-                                title: {
-                                    display: false,
-                                },
-                                tooltip: {
-                                    display: false,
-                                },
-                                border: {
-                                    display: false,
-                                },
-                                grid: {
-                                    display: false,
+                        {currentChart && <div className="flex py-4">
+                            <div style={{width:'calc(100% - 70px)'}}><Line options={{
+                                responsive: true,
+                                plugins: {
+                                    legend: {
+                                        display:false
+                                    },
+                                    title: {
+                                        display: false,
+                                    },
+                                    tooltip: {
+                                        display: false,
+                                    },
                                 },
                                 scales: {
-                                    xAxes: [{
+                                    x: {
                                         display: false,
-                                    }],
-                                    yAxes: [{
-                                      stacked: true,
-                                      position: 'right',
-                                      gridLines: {
-                                        drawBorder: false
-                                      },
-                                      ticks: {
-                                        maxTicksLimit: 3
-                                      }
-                                    }]
-                                }
-                            },
-                        }} data={{
-                            labels :currentChart.data.map(() => ''),
-                            datasets: [
-                            {
-                                label: '',
-                                data: currentChart.data.map((chart) => chart.value),
-                                borderColor: 'rgb(255, 99, 132)',
-                                backgroundColor: 'rgb(255, 99, 132)',
-                                borderWidth:1
-                            },
-                            ],
-                        }} />}
+                                    },
+                                    y: {
+                                        display: false,
+                                    },
+                            }
+                            }} data={{
+                                labels :currentChart.data.map(() => ''),
+                                datasets: [
+                                {
+                                    label: '',
+                                    data: currentChart.data.map((chart) => chart.value),
+                                    borderColor: 'rgb(255, 99, 132)',
+                                    backgroundColor: 'rgb(255, 99, 132)',
+                                    borderWidth:1
+                                },
+                                ],
+                            }} /></div>
+                            <div className="text-[11px] flex flex-col justify-around items-end min-w-[70px] text-gray-500">
+                                {currentChart.data.map((chart,idx) => !String(idx/Math.round(currentChart.data.length/5)).includes('.') &&<div key={idx}>{(chart.value).toLocaleString()}원</div>)}
+                            </div>
+                        </div>}
                         {data.product.sales_summary.sales && data.product.sales_summary.sales.length > 0 && <table className="w-full text-[13px]">
                             <thead>
                                 <tr>
@@ -311,6 +306,31 @@ export default function PageProduct() {
                         
                 </>}
             </div>)}
-        </div>}
+            </>}
+        </div>
+        <div className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-100 flex items-center p-3 z-10 gap-1">
+            <button className="w-[50px] flex flex-col justify-center items-center text-[12px] font-medium">
+                <GoBookmark size={24} />
+                {(data?.product?.counter?.wish_count || 0).toLocaleString()}
+            </button>
+            <div style={{width:'calc(100% - 50px)'}} className="flex gap-1">
+                <button className="py-2 bg-red-500 bg-opacity-[95] text-white flex items-center relative w-full rounded-md">
+                    <span className="absolute top-0 left-[44px] w-px h-full bg-black opacity-10"></span>
+                    <span className="w-[44px] text-[14px] font-bold">구매</span>
+                    <span className="text-[11px] pl-2 text-left line-height-130">
+                        <b className="font-bold block">{(data?.product?.market?.lowest_ask || 0).toLocaleString()}원</b>
+                        즉시 구매가
+                    </span>
+                </button>
+                <button className="py-2 bg-green-500 bg-opacity-[95] text-white flex items-center relative w-full rounded-md">
+                    <span className="absolute top-0 left-[44px] w-px h-full bg-black opacity-10"></span>
+                    <span className="w-[44px] text-[14px] font-bold">판매</span>
+                    <span className="text-[11px] pl-2 text-left line-height-130">
+                        <b className="font-bold block">{(data?.product?.market?.highest_bid || 0).toLocaleString()}원</b>
+                        즉시 판매가
+                    </span>
+                </button>
+            </div>
+        </div>
     </>)
 }

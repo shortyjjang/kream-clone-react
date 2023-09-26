@@ -8,6 +8,7 @@ import PageStyle from "./pages/Style";
 import PageShop from "./pages/Shop";
 import PageCategory from "./pages/Category";
 import PageProduct from "./pages/Product";
+import Chart from "./pages/Chart";
 
 
 const router = createBrowserRouter([
@@ -35,7 +36,11 @@ const router = createBrowserRouter([
         path: "/product/:id",
         element: <PageProduct />,
         errorElement: <ErrorPage />,
-    },
+    },{
+        path: '/trading-chart',
+        element: <Chart />,
+        errorElement: <ErrorPage />,
+    }
 ]);
 
 export default router;

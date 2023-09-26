@@ -14,7 +14,7 @@ export default function ItemsDisplay({view_type, item, list_display_type = null}
         return <ShortcutCollection collection={item} />
     }
     if(view_type === 'home_card_ranking' ||  view_type === 'home_card' || view_type === 'product' ) {
-        return  <Product {...item} release={list_display_type === 'C' && item.product.release.date_released} ranking={view_type === 'home_card_ranking' || item.tag} />
+        return  <Product {...item} release={list_display_type === 'C' && item.product.release.date_released} view_type={view_type} ranking={view_type === 'home_card_ranking' || item.tag} />
     }
     if(view_type === 'style_collection') {
         return <StyleCollection {...item} />

@@ -59,15 +59,13 @@ export default function PageShop() {
     },[fixedFilter])
   return (
     <Layout loading={loading}>
-        {data && <Header tabs={data.tabs} search={true} setPaddingTop={setPaddingTop} menu={<button className='pl-4' onClick={() => navigate('/category')}><AiOutlineMenu size={24} /></button>} />}
-        {data && <div  style={{paddingTop: paddingTop}}>
-            {filter && filter.trending && filter.trending.length > 0 && <Swiper modules={Pagination} pagination={{
-                clickable: true, 
-                type: 'bullets'
-            }} css={css`
-                .swiper-pagination {display:flex;justify-content:center;align-items:center;padding-top:0.5rem;}
-                .swiper-pagination-bullet {width: 4px;height: 4px;border-radius: 2px;background: #000;opacity: 0.1;}
-                .swiper-pagination-bullet-active {opacity: 1;background: #000;}
+        <Header tabs={data?.tabs || []} search={true} setPaddingTop={setPaddingTop} menu={<button className='pl-4' onClick={() => navigate('/category')}><AiOutlineMenu size={24} /></button>} />
+        {data && <div style={{paddingTop: paddingTop}}>
+            {filter && filter.trending && filter.trending.length > 0 && <Swiper pagination={true} modules={[Pagination]} css={css`
+                .swiper-pagination {display:flex;justify-content:center;align-items:center;}
+                .swiper-pagination-bullet {padding:1rem 0.25rem;}
+                .swiper-pagination-bullet:before {content:'';display:block;width: 4px;height: 4px;border-radius: 2px;background: #000;opacity: 0.1;}
+                .swiper-pagination-bullet-active:before {opacity: 1;background: #000;}
             `}>
                 {filter.trending.map((trend,index) => <SwiperSlide key={index}>
                     <div className='grid grid-cols-5 gap-x-2 gap-y-4 py-1'>
@@ -79,15 +77,18 @@ export default function PageShop() {
                 </SwiperSlide>)}
             </Swiper>}
             {filter?.filters && <Filter data={data} filters={filter.filters} count={filter.result_count}/>}
-            {data?.sorting?.choices && data?.sorting?.choices.length > 0 && <Dropdown className='flex justify-end pt-4 px-4' header={<span className='flex items-center text-[13px] gap-1'>
-                {data.sorting.choices.find(type => type.sort === sort || data.sort).display}
-                <LuArrowUpDown size={12} />
-            </span>}>
-                {data.sorting.choices.map((type, idx) => <button key={idx} className={`text-left py-3 text-[14px] relative px-5
-                    ${idx > 0 ? '':'pt-4'}
-                    ${type.sort === sort ? 'text-black font-bold':'text-gray-800 font-light'}
-                `} onClick={() => setSort(type.sort)}>{idx > 0 && <span className="absolute top-0 left-5 right-5 h-px bg-gray-200"></span>}{type.display}</button>)}
-            </Dropdown>}
+            <div className="flex justify-between pt-4 px-4 items-center">
+                <div className=" text-[13px]">상품 {(data?.total || 0).toLocaleString()}</div>
+                {data?.sorting?.choices && data?.sorting?.choices.length > 0 && <Dropdown header={<span className='flex items-center text-[13px] gap-1'>
+                    {data.sorting.choices.find(type => type.sort === sort || data.sort).display}
+                    <LuArrowUpDown size={12} />
+                </span>}>
+                    {data.sorting.choices.map((type, idx) => <button key={idx} className={`text-left py-3 text-[14px] relative px-5
+                        ${idx > 0 ? '':'pt-4'}
+                        ${type.sort === sort ? 'text-black font-bold':'text-gray-800 font-light'}
+                    `} onClick={() => setSort(type.sort)}>{idx > 0 && <span className="absolute top-0 left-5 right-5 h-px bg-gray-200"></span>}{type.display}</button>)}
+                </Dropdown>}
+            </div>
             <div className='grid grid-cols-2 gap-2 p-4'>
                 {data?.items.map((item,index)  => <ItemsDisplay item={item} key={index} view_type={item.display_type}/>)}
             </div>
@@ -96,11 +97,12 @@ export default function PageShop() {
   )
 }
 
+
 function Filter({filters, data, count}) {
     const [currentTab, setCurrentTab] = useState(filters.tabs[0])
     const [selected, setSelected] = useState(data.filters)
     return (<>
-        <div className="flex gap-2 overflow-auto p-4 pb-0 border-t border-gray-100">
+        <div className="flex gap-2 overflow-auto p-4 border-y border-gray-100 invisible-scrollbar">
         {filters.tabs.reduce((a,b) => a + b.selected_count,0) > 0 && <button 
         className='rounded-full w-7 h-7 aspect-square flex items-center justify-center border border-gray-200 bg-gray-50 text-gray-700'><GrPowerReset size={15} /></button>}
         <button className={`text-[13px] whitespace-nowrap px-3 py-1 border rounded-s-full rounded-e-full 

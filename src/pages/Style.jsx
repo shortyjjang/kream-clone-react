@@ -46,7 +46,7 @@ export default function PageStyle() {
     }, [getData])
   return (
     <Layout loading={loading}>
-        {data && <Header tabs={data.tabs} search={true} setPaddingTop={setPaddingTop} sub_group_list={data.header.sub_group_list} />}
+        <Header tabs={data?.tabs} search={true} setPaddingTop={setPaddingTop} sub_group_list={data?.header?.sub_group_list} />
         {data && <div  style={{paddingTop: paddingTop}}>
             {data.header?.additional_info?.update_info && <div className='flex gap-2 text-[13px] p-4 pb-0'>
                 <b>{data?.header?.additional_info?.update_info.title}</b>

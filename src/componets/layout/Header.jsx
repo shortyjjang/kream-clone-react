@@ -15,7 +15,7 @@ export default function Header({tabs = null, search = false, setPaddingTop, sub_
    }
    useEffect(() => {
        if(header?.current) setPaddingTop(header?.current.clientHeight)
-   }, [setPaddingTop])
+   }, [setPaddingTop, location])
   return (
     <div className="fixed top-0 left-0 w-full bg-white z-10" ref={header}>
         <div className="flex justify-between items-center pb-2 px-4 pt-4">
@@ -23,7 +23,7 @@ export default function Header({tabs = null, search = false, setPaddingTop, sub_
             : <h1>Header</h1> }
             {menu}
         </div>
-        {tabs && <Tabs tabs={tabs || []} current={current} value={['redirect_web_url', 'id']} onClick={(url, id) => navigate(
+        {tabs && tabs.length > 0 &&  <Tabs tabs={tabs} current={current} value={['redirect_web_url', 'id']} onClick={(url, id) => navigate(
           url ? url
             : location.pathname 
           , url ? {}
@@ -33,7 +33,7 @@ export default function Header({tabs = null, search = false, setPaddingTop, sub_
             : {tab: id}
           }
         )} />}
-        {sub_group_list&& <Tabs type="button" tabs={sub_group_list} current={currentGroup} value={['id']} onClick={(id) => navigate( location.pathname , {state: {
+        {sub_group_list && sub_group_list.length > 0 && <Tabs type="button" tabs={sub_group_list} current={currentGroup} value={['id']} onClick={(id) => navigate( location.pathname , {state: {
             tab: current,
             sg: id
         }})} />}

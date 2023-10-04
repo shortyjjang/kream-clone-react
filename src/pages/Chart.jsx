@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import Back from '../componets/layout/Back'
 import { liveChart } from '../api/home/chart'
+import Loader from '../componets/Loader'
 
 export default function Chart() {
     const [data, setData] = useState(null)
@@ -34,8 +35,8 @@ export default function Chart() {
             </button>
         }/>
         <div className='pt-[60px] px-4'>
-            {data?.items && data.items.length > 0 && data.items.map((item, index) => (<div key={index} className={`${index > 0 ? 'border-t border-gray-100':''} py-2 flex justify-between`} style={{gridTemplateColumns: 'auto auto'}}>
-                <div className='flex items-center gap-2' style={{maxWidth:'calc(100% - 130px)'}}>
+            {data ? (data.items && data.items.length > 0 && data.items.map((item, index) => (<div key={index} className={`${index > 0 ? 'border-t border-gray-100':''} gap-2 py-2 flex items-center justify-between`}>
+                <div className='flex items-center gap-2' style={{width: 'calc(100% - 9rem)'}}>
                     <span className='aspect-square w-12 rounded-sm overflow-hidden' style={{backgroundColor: item.image.bgcolor || ''}}>
                         <img src={item.image.url} alt={item.translated_name.text || item.name.text} className='aspect-square w-full object-cover' />
                     </span>
@@ -43,15 +44,14 @@ export default function Chart() {
                         {([item.translated_name ? 'translated_name':'name', 'style_code','option']).map((text,idx) => <Text key={idx} {...item[text]} className={`${idx > 0 ? '' :'text-[13px]'}`} />)}
                     </span>
                 </div>
-                <span className='flex justify-end items-center gap-2 w-[130px]'>
-                    <span className='flex flex-col justify-end text-right'>
-                        {(['price', 'price_diff']).map((text, idx) => <Text key={idx} {...item[text]} 
-                            className={`${idx > 0 ? 'text-[11px]' :'text-[13px] font-bold'}`} 
-                        />)}
-                    </span>
-                    <span className='py-2 text-center rounded-sm text-white w-16 text-[13px]' style={{backgroundColor: item.percentage_diff.background_color, color: item.percentage_diff.tag_color }}>{item.percentage_diff.tag}</span>
+                <span className='flex flex-col justify-end text-right w-16'>
+                    {(['price', 'price_diff']).map((text, idx) => <Text key={idx} {...item[text]} 
+                        className={`${idx > 0 ? 'text-[11px]' :'text-[13px] font-bold'}`} 
+                    />)}
                 </span>
-            </div>))}
+                <span className='py-2 text-center rounded-sm text-white w-16 text-[13px]' style={{backgroundColor: item.percentage_diff.background_color, color: item.percentage_diff.tag_color }}>{item.percentage_diff.tag}</span>
+            </div>))):
+            <Loader />}
         </div>
     </>
   )

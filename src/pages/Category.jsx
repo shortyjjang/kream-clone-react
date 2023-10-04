@@ -3,6 +3,7 @@ import { category } from "../api/shop/category"
 import Back from "../componets/layout/Back"
 import { Link } from 'react-router-dom'
 import Image from '../componets/Image'
+import Loader from '../componets/Loader'
 
 export default function PageCategory() {
     const [data, setData] = useState(null)
@@ -17,7 +18,7 @@ export default function PageCategory() {
     }, [getData])
     return (<>
         <Back title='카테고리' />
-        {data && <div className="flex">
+        {data ? <div className="flex">
             <div className="w-[30%] h-screen overflow-auto pt-[57px]">
                 {data.tabs.map((tab, index) => <button className={`w-full text-left px-4 py-3 text-[14px]
                     ${tab.id === data.tab.id 
@@ -45,6 +46,7 @@ export default function PageCategory() {
                     </div>
                 </div>)}
             </div>
-        </div>}
+        </div>
+        :<Loader />}
     </>)
 }

@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function Loader({scale = 1, color = 'white'}) {
+export default function Loader({scale = 1, color = 'black'}) {
     const loadingStyle = {
         animation: 'lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite',
         transformOrigin: '40px 40px'
@@ -11,7 +11,7 @@ export default function Loader({scale = 1, color = 'white'}) {
         </div>
     )
   return (
-    <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80px] aspect-square" style={{transform: `scale(${scale})`}}>
+    <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80px] aspect-square" style={{transform: `translate(var(--tw-translate-x), var(--tw-translate-y)) scale(${scale})`}}>
       <LoadingDot delay="-0.036s" top="63px" left="63px"/>
       <LoadingDot delay="-0.072s" top="68px" left="56px"/>
       <LoadingDot delay="-0.108s" top="71px" left="48px"/>

@@ -13,6 +13,7 @@ import {Scrollbar, Autoplay} from 'swiper/modules'
 import { Link } from 'react-router-dom'
 import ItemsDisplay from '../componets/items/ItemsDisplay'
 import { RiNotification2Line } from 'react-icons/ri'
+import Loader from '../componets/Loader'
 
 export default function Root() {
     const [loading, setLoading] = useState(true)
@@ -41,9 +42,10 @@ export default function Root() {
     }, [getData])
   return (
     <Layout loading={loading}>
-        {data && <Header tabs={data.tabs} setPaddingTop={setPaddingTop} menu={<Link to=""><RiNotification2Line size={24} /></Link> } />}
+        <Header tabs={data?.tabs || []} setPaddingTop={setPaddingTop} menu={<Link to=""><RiNotification2Line size={24} /></Link> } />
         <div style={{paddingTop: paddingTop}}>
-            {data?.items && data.items.map(list => <ListDisplay list={list} view_type={list.view_type} />)}
+            {data ? (data.items && data.items.map(list => <ListDisplay list={list} view_type={list.view_type} />))
+            : <Loader />}
         </div>
     </Layout>
   )
